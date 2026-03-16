@@ -78,6 +78,17 @@
 
         .premium-text-shadow { text-shadow: 2px 2px 0px #fff, 4px 4px 0px rgba(244, 114, 182, 0.3); }
 
+        /* 浮動動畫 */
+        @keyframes float-smooth {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(6deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+        .animate-float-1 { animation: float-smooth 4s ease-in-out infinite; }
+        .animate-float-2 { animation: float-smooth 5s ease-in-out infinite 1.5s; }
+        .animate-float-3 { animation: float-smooth 4.5s ease-in-out infinite 0.5s; }
+        .animate-float-4 { animation: float-smooth 6s ease-in-out infinite 2s; }
+
         /* YouTube 播放器容器樣式 */
         #youtube-player-container iframe { width: 100%; height: 100%; border-radius: 1rem; }
     </style>
@@ -107,11 +118,17 @@
         const ChevronDown = (props) => <IconBase {...props}><path d="m6 9 6 6 6-6"/></IconBase>;
         const Star = (props) => <IconBase {...props}><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="currentColor" stroke="currentColor"/></IconBase>;
 
+        // --- 新增的現代感主題小圖示 ---
+        const Sparkles = (props) => <IconBase {...props}><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></IconBase>;
+        const HelpCircle = (props) => <IconBase {...props}><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></IconBase>;
+        const Camera = (props) => <IconBase {...props}><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></IconBase>;
+        const MousePointer2 = (props) => <IconBase {...props}><path d="M4.037 4.688a.495.495 0 0 1 .651-.651l16 6.5a.5.5 0 0 1-.063.947l-6.124 1.58a2 2 0 0 0-1.438 1.435l-1.579 6.126a.5.5 0 0 1-.947.063z"/></IconBase>;
+
         // --- 戳戳格組件 (PokeHole) ---
         const PokeHole = ({ index, photo, isPoked, onPoke, isRevealed }) => {
             return (
-                <div className="flex flex-col items-center group h-full justify-start">
-                    <div className="relative w-full aspect-square max-w-[180px] bg-gradient-to-br from-pink-100 to-white rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.15)] overflow-hidden border-4 md:border-8 border-white ring-2 md:ring-4 ring-pink-200 transform transition duration-300 group-hover:scale-105">
+                <div className="flex flex-col items-center group h-full justify-start w-full">
+                    <div className="relative w-full aspect-square max-w-[260px] bg-gradient-to-br from-pink-100 to-white rounded-full shadow-[0_4px_8px_rgba(0,0,0,0.15)] overflow-hidden border-4 md:border-8 border-white ring-2 md:ring-4 ring-pink-200 transform transition duration-300 group-hover:scale-105">
                         {/* 圖片顯示設定：object-top 確保臉部對齊上方不被切掉 */}
                         <img 
                             src={photo.url} 
@@ -128,13 +145,13 @@
                         {/* 戳戳紙與按鈕 */}
                         {!isRevealed && (
                             <div onClick={onPoke} className={`absolute inset-0 poke-paper flex items-center justify-center border-4 border-dotted border-white/40 ${isPoked ? 'is-poked' : ''}`}>
-                                <div className="bg-gradient-to-br from-yellow-300 to-yellow-500 text-red-700 rounded-full w-10 h-10 md:w-14 md:h-14 flex items-center justify-center border-2 md:border-4 border-white shadow-lg transform -rotate-12 group-hover:rotate-0 transition duration-300">
-                                    <span className="text-lg md:text-2xl font-black drop-shadow-sm">戳</span>
+                                <div className="bg-gradient-to-br from-yellow-300 to-yellow-500 text-red-700 rounded-full w-12 h-12 md:w-20 md:h-20 flex items-center justify-center border-2 md:border-4 border-white shadow-lg transform -rotate-12 group-hover:rotate-0 transition duration-300">
+                                    <span className="text-xl md:text-4xl font-black drop-shadow-sm">戳</span>
                                 </div>
                             </div>
                         )}
                     </div>
-                    <div className="mt-2 font-bold text-pink-700 bg-white/90 px-3 py-1 rounded-full text-xs md:text-base border border-pink-200 shadow-sm backdrop-blur-sm tracking-wide">
+                    <div className="mt-3 font-bold text-pink-700 bg-white/90 px-4 py-1.5 rounded-full text-sm md:text-lg border border-pink-200 shadow-sm backdrop-blur-sm tracking-wide">
                         線索 {index + 1}
                     </div>
                 </div>
@@ -309,23 +326,74 @@
                     
                     {/* 歡迎畫面 */}
                     {gameState === 'welcome' && (
-                        <div className="bg-white/80 p-6 md:p-10 rounded-[1.5rem] shadow-2xl max-w-lg w-full text-center border-4 border-white/50 backdrop-blur-md flex flex-col justify-center gap-4">
-                            <h1 className="text-4xl md:text-5xl font-black text-pink-600 premium-text-shadow tracking-widest flex items-center justify-center gap-2">
-                                <Star size={36} className="text-yellow-400 animate-pulse" />
-                                猜猜我是誰
-                                <Star size={36} className="text-yellow-400 animate-pulse" />
-                            </h1>
-                            <div className="inline-block bg-gradient-to-r from-pink-500 to-rose-500 text-white font-bold px-6 py-2 rounded-full text-xl transform -rotate-2 border-2 border-white shadow-xl ring-2 ring-pink-200 tracking-wider mx-auto">
-                                明星戳戳樂版
+                        <div className="bg-white/60 p-8 md:p-14 rounded-[2.5rem] shadow-[0_20px_50px_rgba(219,39,119,0.15)] max-w-xl w-full text-center border border-white backdrop-blur-xl flex flex-col justify-center gap-8 relative overflow-hidden">
+                            {/* 裝飾性背景光暈 */}
+                            <div className="absolute -top-24 -right-24 w-64 h-64 bg-gradient-to-br from-pink-300 to-rose-200 rounded-full blur-3xl opacity-50 mix-blend-multiply pointer-events-none"></div>
+                            <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-gradient-to-br from-yellow-200 to-orange-200 rounded-full blur-3xl opacity-50 mix-blend-multiply pointer-events-none"></div>
+                            
+                            {/* 現代感漂浮小圖示 */}
+                            <div className="absolute top-8 left-8 md:top-12 md:left-12 text-rose-400/50 animate-float-1 pointer-events-none">
+                                <HelpCircle size={40} className="md:w-12 md:h-12" />
                             </div>
-                            <button onClick={startGame} className="w-full bg-gradient-to-b from-yellow-300 to-yellow-500 hover:from-yellow-400 hover:to-yellow-600 text-pink-900 text-2xl font-black py-4 rounded-xl shadow-[0_4px_0_#b45309] active:translate-y-1 transition flex items-center justify-center gap-2 border-2 border-white group relative overflow-hidden">
-                                <span className="relative z-10 flex items-center gap-2 drop-shadow-sm tracking-wide"><Play size={32} /> 開始遊戲</span>
-                                <div className="absolute top-0 -left-full w-full h-full bg-white/30 skew-x-12 group-hover:animate-shine" />
-                            </button>
-                            <div className="pt-4 border-t border-pink-100 flex flex-col items-center gap-2">
-                                <p className="text-pink-800 text-base font-bold tracking-wide">設計者：卓佳蓉 Alice Cho 愛妮老師</p>
-                                <div className="flex items-center gap-1 text-pink-700 bg-gradient-to-r from-pink-50 to-white px-4 py-1 rounded-full text-xs font-bold shadow-sm border border-pink-100 tracking-wide">
-                                    <Trophy size={14} className="text-yellow-500" />
+                            <div className="absolute bottom-20 right-8 md:bottom-28 md:right-12 text-pink-400/50 animate-float-2 pointer-events-none">
+                                <Camera size={44} className="md:w-14 md:h-14" />
+                            </div>
+                            <div className="absolute top-24 right-6 md:top-32 md:right-10 text-yellow-400/60 animate-float-3 pointer-events-none">
+                                <Sparkles size={32} className="md:w-10 md:h-10" />
+                            </div>
+                            <div className="absolute bottom-32 left-6 md:bottom-40 md:left-8 text-orange-400/40 animate-float-4 pointer-events-none">
+                                <MousePointer2 size={36} className="md:w-12 md:h-12 transform -rotate-12" />
+                            </div>
+
+                            <div className="relative z-10 flex flex-col gap-4 md:gap-6">
+                                {/* 新增的 Q 版大頭照 */}
+                                <div className="relative group mx-auto mb-2 md:mb-0">
+                                    {/* 頭像背後的發光陰影 */}
+                                    <div className="absolute inset-0 bg-gradient-to-br from-rose-300 to-pink-500 rounded-full blur-xl opacity-40 group-hover:opacity-70 transition duration-500 transform scale-110"></div>
+                                    <img 
+                                        src="./大頭照Q版運動風全身紅-good.jpg" 
+                                        alt="Alice Cho 愛妮老師" 
+                                        className="relative w-32 h-32 md:w-40 md:h-40 object-cover object-top rounded-full border-[4px] md:border-[6px] border-white shadow-xl transform group-hover:scale-105 transition-all duration-300 bg-black/5"
+                                        onError={(e) => { 
+                                            e.target.onerror = null; 
+                                            // 在線上預覽時若抓不到您的圖片，會暫時顯示問號大頭貼防破圖
+                                            e.target.src = "https://ui-avatars.com/api/?name=%3F&background=f43f5e&color=fff&size=160&bold=true"; 
+                                        }}
+                                    />
+                                </div>
+
+                                <div className="inline-block mx-auto">
+                                    <span className="text-xs md:text-sm font-bold tracking-[0.4em] text-rose-800 uppercase border-b-2 border-rose-300 pb-2 drop-shadow-sm ml-2 flex items-center justify-center gap-2">
+                                        <Sparkles size={14} className="text-rose-400" />
+                                        經典回憶．明星戳戳樂
+                                        <Sparkles size={14} className="text-rose-400" />
+                                    </span>
+                                </div>
+                                
+                                <h1 
+                                    className="text-5xl md:text-6xl font-black tracking-[0.15em] py-2 text-transparent bg-clip-text bg-gradient-to-r from-rose-700 via-pink-600 to-rose-700 drop-shadow-sm ml-3"
+                                    style={{ fontFamily: "'Noto Serif TC', serif" }}
+                                >
+                                    猜猜我是誰
+                                </h1>
+
+                                <p className="text-pink-800/70 font-bold tracking-[0.2em] text-sm md:text-base ml-1 flex items-center justify-center gap-2">
+                                    <HelpCircle size={18} className="text-pink-500/80" />
+                                    喚醒你的記憶，挑戰你的眼力
+                                </p>
+                            </div>
+
+                            <div className="relative z-10 mt-2">
+                                <button onClick={startGame} className="group relative overflow-hidden w-full max-w-sm mx-auto bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white text-xl md:text-2xl font-bold py-4 rounded-2xl shadow-[0_10px_20px_rgba(225,29,72,0.3)] hover:shadow-[0_15px_30px_rgba(225,29,72,0.4)] transition-all duration-300 flex items-center justify-center gap-3 border border-white/40 tracking-[0.2em] hover:-translate-y-1">
+                                    <span className="relative z-10 flex items-center gap-2 pl-2"><MousePointer2 size={24} className="text-white/90" /> 開始挑戰</span>
+                                    <div className="absolute top-0 -left-[150%] w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12 group-hover:animate-shine" />
+                                </button>
+                            </div>
+
+                            <div className="relative z-10 pt-8 border-t border-pink-300/30 flex flex-col items-center gap-4">
+                                <p className="text-pink-900/60 text-xs md:text-sm font-bold tracking-[0.15em]">設計策劃 / 卓佳蓉 Alice Cho 愛妮老師</p>
+                                <div className="flex items-center gap-2 text-rose-700 bg-white/60 px-5 py-2.5 rounded-full text-xs font-bold shadow-sm border border-white tracking-widest backdrop-blur-md">
+                                    <Trophy size={16} className="text-yellow-600" />
                                     <span>國立中正大學高齡者教育研究所第一名</span>
                                 </div>
                             </div>
